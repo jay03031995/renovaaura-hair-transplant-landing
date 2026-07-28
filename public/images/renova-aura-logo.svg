@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 440" role="img" aria-labelledby="title desc">
+  <title id="title">Renova Aura logo</title>
+  <desc id="desc">Renova Aura emblem with the brand name and service line below it.</desc>
+  <image href="/images/renova-aura-emblem.png" x="280" y="0" width="340" height="340" preserveAspectRatio="xMidYMid meet" />
+  <text
+    x="450"
+    y="385"
+    text-anchor="middle"
+    fill="#18241d"
+    font-family="Georgia, 'Times New Roman', serif"
+    font-size="88"
+    font-weight="500"
+    letter-spacing="-1.5"
+  >
+    RenovaAura
+  </text>
+  <text
+    x="450"
+    y="418"
+    text-anchor="middle"
+    fill="#5f7264"
+    font-family="Arial, Helvetica, sans-serif"
+    font-size="19"
+    font-weight="600"
+    letter-spacing="4.2"
+  >
+    DERMATOLOGY | WELLNESS | AESTHETICS | PLASTIC SURGERY | HAIR TRANSPLANT
+  </text>
+</svg>
