@@ -93,8 +93,8 @@ const results = [
     note: "Progress photo at month 12",
   },
   {
-    before: "/images/result-3-after.jpeg",
-    after: "/images/result-3-before.jpeg",
+    before: "/images/result-3-before.jpeg",
+    after: "/images/result-3-after.jpeg",
     beforeAlt: "Patient before hair transplant showing temple recession",
     afterAlt: "Patient after hair transplant showing restored temples",
     label: "DHI - Temples & hairline",
