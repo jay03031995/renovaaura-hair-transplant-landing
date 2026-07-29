@@ -828,11 +828,11 @@ function Benefits() {
     <section id="experience" className="px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
       <div className="mx-auto max-w-7xl overflow-hidden rounded-[2.2rem] bg-[#15231b] text-white shadow-[0_36px_120px_rgba(21,35,27,0.26)] sm:rounded-[3rem]">
         <div className="grid lg:grid-cols-[1.02fr_0.98fr]">
-          <div className="relative min-h-[20rem] overflow-hidden lg:min-h-full">
+          <div className="relative min-h-[20rem] overflow-hidden lg:min-h-0">
             <img
               src="/images/why.jpeg"
               alt="Patient speaking with a care coordinator at a modern clinic"
-              className="h-full w-full object-cover"
+              className="absolute inset-0 h-full w-full object-cover"
               loading="lazy"
             />
             <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(21,35,27,0.0),rgba(21,35,27,0.34)),linear-gradient(0deg,rgba(21,35,27,0.55),transparent_55%)]" />
