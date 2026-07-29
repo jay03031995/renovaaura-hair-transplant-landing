@@ -77,24 +77,24 @@ const features = [
 
 const results = [
   {
-    before: "/images/renova-patient-after.jpg",
-    after: "/images/renova-patient-before.jpg",
+    before: "/images/renova-patient-after.jpeg",
+    after: "/images/renova-patient-before.jpeg",
     beforeAlt: "Patient before hair transplant showing a receding frontal hairline",
     afterAlt: "Patient after hair transplant showing a restored frontal hairline",
     label: "FUE - Frontal hairline",
     note: "Progress photo at month 10",
   },
   {
-    before: "/images/result-2-after.jpg",
-    after: "/images/result-2-before.jpg",
+    before: "/images/result-2-after.jpeg",
+    after: "/images/result-2-before.jpeg",
     beforeAlt: "Patient before hair transplant showing crown thinning",
     afterAlt: "Patient after hair transplant showing restored crown density",
     label: "FUE - Crown density",
     note: "Progress photo at month 12",
   },
   {
-    before: "/images/result-3-after.jpg",
-    after: "/images/result-3-before.jpg",
+    before: "/images/result-3-after.jpeg",
+    after: "/images/result-3-before.jpeg",
     beforeAlt: "Patient before hair transplant showing temple recession",
     afterAlt: "Patient after hair transplant showing restored temples",
     label: "DHI - Temples & hairline",
