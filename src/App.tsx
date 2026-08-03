@@ -75,8 +75,7 @@ const features = [
   "Natural hairline design",
   "FUE and DHT techniques",
   "EMI plans available",
-  "Private treatment suites",
-  "12-month growth follow-up",
+  "Regular follow-ups",
 ];
 
 const results = [
@@ -85,7 +84,7 @@ const results = [
     after: "/images/b1.jpeg",
     beforeAlt: "Patient before hair transplant showing a receding frontal hairline",
     afterAlt: "Patient after hair transplant showing a restored frontal hairline",
-    label: "FUE - Frontal hairline",
+    label: "FUE - Frontal Hairline",
     note: "Progress photo at month 10",
   },
   {
@@ -93,7 +92,7 @@ const results = [
     after: "/images/b2.jpeg",
     beforeAlt: "Patient before hair transplant showing crown thinning",
     afterAlt: "Patient after hair transplant showing restored crown density",
-    label: "FUE - Crown density",
+    label: "Frontal Hairline ",
     note: "Progress photo at month 12",
   },
   {
@@ -101,19 +100,19 @@ const results = [
     after: "/images/b3.jpeg",
     beforeAlt: "Patient before hair transplant showing temple recession",
     afterAlt: "Patient after hair transplant showing restored temples",
-    label: "DHT - Temples & hairline",
+    label: "Full Coverage",
     note: "Progress photo at month 9",
   },
 ];
 
 const benefits = [
-  "Experienced surgeon specialising in DHT & FUE",
-  "Doctor does the surgery, not the technician",
-  "Natural and customised hairline creation",
-  "Dedicated transplant team & advanced equipment",
-  "Comfortable procedure and quick recovery time",
-  "Detailed pre- and post-procedure guidance",
-  "Clinics designed for safety, hygiene & comfort",
+  "Surgeon-led hair transplant procedure following ISHRS-recommended protocols",
+  "Minimal graft wastage through precise extraction and implantation techniques",
+  "Transparent graft count with clear documentation and treatment planning",
+  "Customized hairline design based on age, facial features, hair quality, and future hair loss patterns",
+  "Long-term hair restoration planning to preserve and complement existing hair",
+  "Advanced graft handling techniques to support optimal graft survival and natural-looking results",
+  "Personalized treatment approach tailored to individual goals, hair characteristics, and lifestyle"
 ];
 
 const googleReviews = [
@@ -149,11 +148,6 @@ const googleReviews = [
 
 const faqs = [
   {
-    question: "What does a hair transplant cost in Delhi?",
-    answer:
-      "It depends on your graft count and technique. At Renova Aura, plans start from about Rs 69,000 for focused work, with most full hairline cases ranging between Rs 1.19 and Rs 1.99 lakh. You receive an exact written quote only after assessment - no hidden charges, GST included.",
-  },
-  {
     question: "Is EMI available?",
     answer:
       "Yes. EMI options and flexible payment plans are available on select packages. Our coordinator shares the current EMI terms during your consultation.",
@@ -173,7 +167,66 @@ const faqs = [
     answer:
       "Early growth often starts around months three to four, with more visible density around months six to nine. Full maturation can take 12 months or longer, and results vary from patient to patient.",
   },
-
+  {
+    question: "Am I a suitable candidate for a hair transplant?",
+    answer:
+      "Suitability depends on factors such as the extent of hair loss, donor hair availability, scalp condition, age, and future hair loss patterns. A detailed consultation helps determine the most appropriate treatment plan.",
+  },
+  {
+    question: "How many grafts will I need?",
+    answer:
+      "The required graft count varies for every individual. It depends on the area of baldness, desired density, hair characteristics, and long-term restoration goals. An assessment is required for an accurate estimate.",
+  },
+  {
+    question: "Is the procedure painful?",
+    answer:
+      "Hair transplant procedures are generally well tolerated. Local anesthesia is used to keep you comfortable during the procedure, and most patients experience only mild discomfort during recovery.",
+  },
+  {
+    question: "How long does a hair transplant procedure take?",
+    answer:
+      "The duration depends on the number of grafts being transplanted. Most procedures are completed within one day, while larger sessions may require additional time.",
+  },
+  {
+    question: "Will the transplanted hair fall out after surgery?",
+    answer:
+      "Temporary shedding of transplanted hair is normal during the first few weeks after the procedure. The follicles remain in place and new growth typically begins a few months later.",
+  },
+  {
+    question: "How soon can I return to work?",
+    answer:
+      "Many patients return to desk-based work within a few days. Recovery timelines vary depending on individual healing and the nature of your job.",
+  },
+  {
+    question: "Are the results permanent?",
+    answer:
+      "Transplanted hair follicles are generally resistant to the effects of genetic hair loss and can provide long-lasting results. However, existing non-transplanted hair may continue to thin over time.",
+  },
+  {
+    question: "Can women undergo hair transplantation?",
+    answer:
+      "Yes. Hair transplantation can be an effective option for selected female patients experiencing hair thinning, traction alopecia, or specific patterns of hair loss after proper evaluation.",
+  },
+  {
+    question: "What precautions should I follow after the procedure?",
+    answer:
+      "Patients receive detailed post-procedure instructions regarding washing, sleeping position, medications, physical activity, and scalp care to support healing and graft survival.",
+  },
+  {
+    question: "Will I need medications after a hair transplant?",
+    answer:
+      "Depending on your condition and goals, the doctor may recommend medications or supportive treatments to help maintain existing hair and optimize long-term results.",
+  },
+  {
+    question: "Can I combine a hair transplant with PRP therapy?",
+    answer:
+      "Yes. PRP therapy may be recommended in selected cases as part of a comprehensive hair restoration plan to support hair health and recovery.",
+  },
+  {
+    question: "What makes a surgeon-led hair transplant different?",
+    answer:
+      "In a surgeon-led procedure, critical steps such as planning, hairline design, graft extraction strategy, and implantation supervision are performed or directly overseen by the treating surgeon, ensuring greater precision and personalization.",
+  },
 ];
 
 /* -------------------------------------- Reveal on scroll hook ---------------------------------- */
@@ -528,7 +581,7 @@ function Hero() {
           </h1>
           <p className="mt-3 max-w-2xl text-pretty text-sm leading-7 text-[#e9efe1]/88 sm:text-base sm:leading-8 lg:text-lg">
             Book a hair transplant assessment at Renova Aura. Doctor-led FUE &amp; DHT procedures designed for
-            natural hairlines, honest pricing in INR, and recovery support that stays with you to month twelve.
+            natural hairlines, honest pricing in INR, and recovery support that stays with you always.
           </p>
           <div className="mt-5 flex flex-col items-start gap-2.5 sm:flex-row sm:flex-wrap">
             {trustChips.map((chip, index) => (
@@ -586,7 +639,7 @@ function Proof() {
               Why patients choose us
             </p>
             <h2 className="mt-5 text-balance text-3xl font-semibold tracking-[-0.04em] text-[#15231b] sm:text-4xl lg:text-5xl">
-              Doctor-led hair restoration, planned around your face.
+              Doctor-led hair restoration, planned around your need.
             </h2>
             <p className="mt-5 text-base leading-7 text-[#52615a]">
               Every decision starts with candidacy, donor management, and a natural-looking hairline rather than a
