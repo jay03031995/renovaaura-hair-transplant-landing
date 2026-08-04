@@ -21,7 +21,7 @@ const MAPS_URL =
   "https://www.google.com/maps/search/?api=1&query=" +
   encodeURIComponent("Renova Aura, C-3, 1st floor, Anand Vihar, New Delhi, 110092");
 const MAPS_EMBED =
-  "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3501.2002859535874!2d77.30674091075996!3d28.653721083017228!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390cfb55ea1609f7%3A0x892b1469aa0107d4!2sRenovaAura!5e0!3m2!1sen!2sus!4v1785242602390!5m2!1sen!2sus";
+  "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3501.209440367935!2d77.30696542555364!3d28.65344692565341!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390cfbe2a421adb7%3A0xf631ccc92514fec0!2sDr.%20Bhawna%20Bhardwaj%20-%20Dermatologist%20%7C%20Renovaaura!5e0!3m2!1sen!2sin!4v1785842466361!5m2!1sen!2sin";
 
 const heroImage =
   "/images/hero.jpeg";
@@ -101,15 +101,15 @@ const results = [
     beforeAlt: "Patient before hair transplant showing a receding frontal hairline",
     afterAlt: "Patient after hair transplant showing a restored frontal hairline",
     label: "FUE - Frontal Hairline",
-    note: "Progress photo at month 10",
+    note: "3,000 Grafts • 12-Month Result",
   },
   {
     before: "/images/a2.jpeg",
     after: "/images/b2.jpeg",
     beforeAlt: "Patient before hair transplant showing crown thinning",
     afterAlt: "Patient after hair transplant showing restored crown density",
-    label: "Frontal Hairline ",
-    note: "Progress photo at month 12",
+    label: "Frontal Hairline",
+    note: "2,500 Grafts • 13-Month Result",
   },
   {
     before: "/images/a3.jpeg",
@@ -117,7 +117,23 @@ const results = [
     beforeAlt: "Patient before hair transplant showing temple recession",
     afterAlt: "Patient after hair transplant showing restored temples",
     label: "Full Coverage",
-    note: "Progress photo at month 9",
+    note: "4,000 Grafts • 8-Month Result",
+  },
+  {
+    before: "/images/a4.jpeg",
+    after: "/images/b4.jpeg",
+    beforeAlt: "Patient before hair transplant showing frontal hairline recession",
+    afterAlt: "Patient after hair transplant showing a denser and natural frontal hairline",
+    label: "Frontal to Mid Coverage",
+    note: "3,000 Grafts • 15-Month Result",
+  },
+  {
+    before: "/images/a5.jpeg",
+    after: "/images/b5.jpeg",
+    beforeAlt: "Patient before hair transplant showing frontal hair loss",
+    afterAlt: "Patient after hair transplant showing restored frontal density",
+    label: "Frontal Hairline",
+    note: "2,600 Grafts • 8-Month Result",
   },
 ];
 
@@ -1207,7 +1223,7 @@ function Visit() {
           <div className="p-7 sm:p-10 lg:p-14" data-reveal>
             <p className="text-sm font-semibold uppercase tracking-[0.32em] text-[#5e7a66]">Visit the clinic</p>
             <h2 className="mt-5 text-balance text-3xl font-semibold tracking-[-0.04em] sm:text-4xl lg:text-5xl">
-              Easy to reach from anywhere in Delhi NCR.
+           A trusted destination for hair restoration in Delhi.
             </h2>
             <div className="mt-8 space-y-6">
               <div className="flex gap-4">
