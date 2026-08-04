@@ -889,7 +889,7 @@ function Benefits() {
           <div className="p-7 sm:p-9 lg:p-10 xl:p-11" data-reveal>
             <p className="text-sm font-semibold uppercase tracking-[0.32em] text-[#c9d8bf]">Patient benefits</p>
             <h2 className="mt-5 text-balance text-3xl font-semibold tracking-[-0.04em] sm:text-4xl lg:text-5xl">
-              Feel informed before, protected during, supported after.
+            Natural results start with thoughtful planning.
             </h2>
             <div className="mt-7 grid gap-2.5">
               {benefits.map((benefit, index) => (
