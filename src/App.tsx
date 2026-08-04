@@ -36,37 +36,53 @@ const navItems = [
 ];
 
 const proofLines = [
-  "Doctor-led DHT & FUE procedures with donor-safe planning",
-  "Natural, customised hairline creation for your age and face",
-  "Dedicated transplant team with advanced clinical equipment",
+  "Transparent graft planning with honest recommendations",
+  "Natural-looking results tailored to your facial features",
+  "Dedicated follow-up support throughout your hair growth journey",
 ];
 
-const trustChips = ["Doctor-led procedures", "EMI Plans Available", "English & Hindi consultations"];
+const trustChips = [
+  "Surgeon-Led Hair Transplants",
+  "Natural Hairline Design",
+  "EMI Plans Available",
+];
 
 const methodSteps = [
   {
     step: "01",
-    icon: "design",
-    title: "Hairline architecture",
-    copy: "Your face shape, age, donor capacity, and long-term hair loss pattern are mapped before a single graft is placed.",
+    icon: "consultation",
+    title: "Consultation & Hairline Planning",
+    copy: "The surgeon evaluates your hair loss pattern, donor area availability, facial proportions, and future hair loss progression to create a personalized and natural-looking hairline design.",
   },
   {
     step: "02",
-    icon: "surgery",
-    title: "Precision extraction",
-    copy: "FUE and DHT-led workflows help protect donor density while giving the surgical team fine control over direction and angle.",
+    icon: "anaesthesia",
+    title: "Local Anaesthesia",
+    copy: "Local anaesthesia is administered to both the donor and recipient areas to ensure a comfortable and virtually pain-free experience throughout the procedure.",
   },
   {
     step: "03",
-    icon: "comfort",
-    title: "Comfort-first procedure day",
-    copy: "A calm private suite, transparent pacing, and attentive clinical support make the day feel organised rather than overwhelming.",
+    icon: "design",
+    title: "Recipient Site Creation",
+    copy: "Tiny recipient sites are carefully created using specialized micro blades or needles to achieve optimal density, natural angulation, and realistic hair growth patterns.",
   },
   {
     step: "04",
+    icon: "extraction",
+    title: "Donor Follicular Unit Extraction",
+    copy: "Healthy follicular units are individually extracted from the donor area using advanced micro-punch techniques while preserving surrounding tissue and donor density.",
+  },
+  {
+    step: "05",
+    icon: "implantation",
+    title: "Graft Implantation",
+    copy: "The extracted follicles are meticulously implanted to achieve natural density and direction using implanters or double-forceps no-root-touch techniques for maximum graft protection.",
+  },
+  {
+    step: "06",
     icon: "followup",
-    title: "Growth concierge",
-    copy: "Recovery reminders, photo check-ins, and milestone reviews keep your result on track from the first wash to month twelve.",
+    title: "Post-Procedure Care & Recovery",
+    copy: "The treated area is cleaned, detailed post-operative instructions are provided, and supportive medications may be recommended to promote healing, optimize hair growth, and maintain existing hair.",
   },
 ];
 
@@ -148,85 +164,57 @@ const googleReviews = [
 
 const faqs = [
   {
-    question: "Is EMI available?",
+    question: "Will there be scars after a hair transplant?",
     answer:
-      "Yes. EMI options and flexible payment plans are available on select packages. Our coordinator shares the current EMI terms during your consultation.",
+      "With modern techniques like FUE, scarring is minimal and usually not noticeable, especially once your hair grows back. Tiny extraction points in the donor area typically heal well and are often difficult to detect without close examination.",
   },
   {
-    question: "How do I reach the clinic?",
+    question: "Does a hair transplant look natural?",
     answer:
-      "We are at C-3, 1st floor, Anand Vihar, New Delhi, 110092 - close to Anand Vihar metro station (Blue and Pink line interchange) and ISBT Anand Vihar. Call or WhatsApp us and we will guide you in, or help plan your visit if you are travelling from outside Delhi NCR.",
+      "Yes. When performed by an experienced surgeon, the transplanted hair blends naturally with your existing hair. Careful attention to hairline design, graft placement, density, and hair direction helps create results that look natural and age appropriately.",
   },
   {
-    question: "Will the hairline look natural?",
+    question: "Are there any risks or side effects of a hair transplant?",
     answer:
-      "Naturalness is the priority. We design age-appropriate hairlines with soft transitions, varied graft placement, and direction control, so the outcome blends with your existing hair.",
+      "Hair transplant procedures are generally safe when performed by qualified specialists. Temporary swelling, redness, itching, scab formation, or mild discomfort may occur during the healing period. Serious complications are uncommon when the procedure is performed correctly and post-procedure instructions are followed.",
   },
   {
-    question: "When will I see growth?",
+    question: "Can I style or cut my transplanted hair?",
     answer:
-      "Early growth often starts around months three to four, with more visible density around months six to nine. Full maturation can take 12 months or longer, and results vary from patient to patient.",
+      "Yes. After your scalp has healed, you can cut, style, and groom your transplanted hair just like your natural hair.",
   },
   {
-    question: "Am I a suitable candidate for a hair transplant?",
+    question: "How long will my transplanted hair last?",
     answer:
-      "Suitability depends on factors such as the extent of hair loss, donor hair availability, scalp condition, age, and future hair loss patterns. A detailed consultation helps determine the most appropriate treatment plan.",
+      "Hair transplanted from the donor area is generally resistant to the hormonal factors responsible for pattern hair loss. These follicles can continue growing for many years. However, maintaining existing non-transplanted hair is equally important for long-term results and overall appearance.",
+  },
+
+{
+  question: "Will I need more than one hair transplant in my lifetime?",
+  answer:
+    "Some patients achieve their desired result with a single procedure, while others may require additional sessions in the future if hair loss progresses. This depends on factors such as age, pattern of hair loss, donor availability, and long-term goals.",
+},
+{
+  question: "When can I wash my hair after a hair transplant?",
+  answer:
+    "Patients are usually advised to wait for a specific period before the first wash and follow a gentle washing protocol during the initial healing phase. Detailed instructions are provided after the procedure to help protect the grafts and support proper healing.",
+},
+  {
+    question: "Can a hair transplant improve density in thinning areas?",
+    answer:
+      "Yes. Hair transplantation can be used to improve the appearance of density in thinning areas. The treatment plan is customized based on the amount of existing hair, donor capacity, and long-term restoration goals to ensure natural-looking coverage.",
   },
   {
-    question: "How many grafts will I need?",
+    question: "What happens if my hair loss continues after the transplant?",
     answer:
-      "The required graft count varies for every individual. It depends on the area of baldness, desired density, hair characteristics, and long-term restoration goals. An assessment is required for an accurate estimate.",
+      "A hair transplant restores hair to specific areas but does not stop future hair loss in untreated regions. This is why long-term planning is important. Additional treatments or hair maintenance strategies may be recommended to help preserve existing hair and maintain a balanced appearance.",
   },
   {
-    question: "Is the procedure painful?",
+    question: "Will my transplanted hair require special care in the future?",
     answer:
-      "Hair transplant procedures are generally well tolerated. Local anesthesia is used to keep you comfortable during the procedure, and most patients experience only mild discomfort during recovery.",
+      "Once the transplanted follicles have healed and established growth, they can generally be treated like natural hair. You can wash, cut, and style them normally. However, maintaining overall scalp and hair health remains important for long-term results.",
   },
-  {
-    question: "How long does a hair transplant procedure take?",
-    answer:
-      "The duration depends on the number of grafts being transplanted. Most procedures are completed within one day, while larger sessions may require additional time.",
-  },
-  {
-    question: "Will the transplanted hair fall out after surgery?",
-    answer:
-      "Temporary shedding of transplanted hair is normal during the first few weeks after the procedure. The follicles remain in place and new growth typically begins a few months later.",
-  },
-  {
-    question: "How soon can I return to work?",
-    answer:
-      "Many patients return to desk-based work within a few days. Recovery timelines vary depending on individual healing and the nature of your job.",
-  },
-  {
-    question: "Are the results permanent?",
-    answer:
-      "Transplanted hair follicles are generally resistant to the effects of genetic hair loss and can provide long-lasting results. However, existing non-transplanted hair may continue to thin over time.",
-  },
-  {
-    question: "Can women undergo hair transplantation?",
-    answer:
-      "Yes. Hair transplantation can be an effective option for selected female patients experiencing hair thinning, traction alopecia, or specific patterns of hair loss after proper evaluation.",
-  },
-  {
-    question: "What precautions should I follow after the procedure?",
-    answer:
-      "Patients receive detailed post-procedure instructions regarding washing, sleeping position, medications, physical activity, and scalp care to support healing and graft survival.",
-  },
-  {
-    question: "Will I need medications after a hair transplant?",
-    answer:
-      "Depending on your condition and goals, the doctor may recommend medications or supportive treatments to help maintain existing hair and optimize long-term results.",
-  },
-  {
-    question: "Can I combine a hair transplant with PRP therapy?",
-    answer:
-      "Yes. PRP therapy may be recommended in selected cases as part of a comprehensive hair restoration plan to support hair health and recovery.",
-  },
-  {
-    question: "What makes a surgeon-led hair transplant different?",
-    answer:
-      "In a surgeon-led procedure, critical steps such as planning, hairline design, graft extraction strategy, and implantation supervision are performed or directly overseen by the treating surgeon, ensuring greater precision and personalization.",
-  },
+
 ];
 
 /* -------------------------------------- Reveal on scroll hook ---------------------------------- */
@@ -574,15 +562,18 @@ function Hero() {
       <div className="relative mx-auto w-full max-w-7xl">
         <div className="max-w-3xl xl:max-w-4xl" data-reveal>
           <p className="mb-3 text-xs font-semibold uppercase tracking-[0.34em] text-[#c9d8bf] sm:text-[0.8rem] sm:tracking-[0.44em]">
-            Hair Transplant {"\u00B7"} Anand Vihar, Delhi
-          </p>
-          <h1 className="text-balance text-4xl font-semibold tracking-[-0.05em] text-white sm:text-5xl md:text-6xl lg:text-[3.5rem] lg:leading-[0.92]">
-            Hair restoration made quietly exceptional.
-          </h1>
-          <p className="mt-3 max-w-2xl text-pretty text-sm leading-7 text-[#e9efe1]/88 sm:text-base sm:leading-8 lg:text-lg">
-            Book a hair transplant assessment at Renova Aura. Doctor-led FUE &amp; DHT procedures designed for
-            natural hairlines, honest pricing in INR, and recovery support that stays with you always.
-          </p>
+  Hair Transplant Specialist • Anand Vihar, Delhi
+</p>
+
+<h1 className="text-balance text-4xl font-semibold tracking-[-0.05em] text-white sm:text-5xl md:text-6xl lg:text-[3.5rem] lg:leading-[0.92]">
+  Natural Hair Transplants Designed By A Doctor, Not A Technician
+</h1>
+
+<p className="mt-3 max-w-2xl text-pretty text-sm leading-7 text-[#e9efe1]/88 sm:text-base sm:leading-8 lg:text-lg">
+  Consult Dr. Bhawna Bhardwaj for personalized hair restoration. Our surgeon-led
+  FUE and DHT procedures focus on natural hairlines, minimal graft wastage,
+  transparent graft counts, and long-term planning for lasting results.
+</p>
           <div className="mt-5 flex flex-col items-start gap-2.5 sm:flex-row sm:flex-wrap">
             {trustChips.map((chip, index) => (
               <span
@@ -634,17 +625,19 @@ function Proof() {
       <div className="mx-auto max-w-7xl">
         <div className="grid gap-10 lg:grid-cols-[0.82fr_1.18fr] lg:items-center">
           <div data-reveal>
-            <p className="inline-flex items-center gap-2 rounded-full border border-[#15231b]/10 bg-white/45 px-4 py-2 text-xs font-semibold uppercase tracking-[0.24em] text-[#5e7a66]">
-              <SparkIcon className="h-3.5 w-3.5" />
-              Why patients choose us
-            </p>
-            <h2 className="mt-5 text-balance text-3xl font-semibold tracking-[-0.04em] text-[#15231b] sm:text-4xl lg:text-5xl">
-              Doctor-led hair restoration, planned around your need.
-            </h2>
-            <p className="mt-5 text-base leading-7 text-[#52615a]">
-              Every decision starts with candidacy, donor management, and a natural-looking hairline rather than a
-              one-size-fits-all graft target.
-            </p>
+<p className="inline-flex items-center gap-2 rounded-full border border-[#15231b]/10 bg-white/45 px-4 py-2 text-xs font-semibold uppercase tracking-[0.24em] text-[#5e7a66]">
+  <SparkIcon className="h-3.5 w-3.5" />
+  Why Choose Dr. Bhawna Bhardwaj
+</p>
+
+<h2 className="mt-5 text-balance text-3xl font-semibold tracking-[-0.04em] text-[#15231b] sm:text-4xl lg:text-5xl">
+  Hair Restoration Focused On Natural Results
+</h2>
+
+<p className="mt-5 text-base leading-7 text-[#52615a]">
+  Every treatment plan is tailored to your hair loss pattern, donor availability,
+  facial proportions, and long-term goals—not just the number of grafts required.
+</p>
           </div>
           <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-3" data-reveal>
             {proofLines.map((line, index) => (
@@ -676,18 +669,21 @@ function Method() {
     <section id="method" className="px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
       <div className="mx-auto max-w-7xl">
         <div className="grid gap-8 lg:grid-cols-[0.8fr_1.2fr] lg:items-end" data-reveal>
-          <div>
-            <p className="inline-flex items-center gap-2 rounded-full border border-[#15231b]/10 bg-white/45 px-4 py-2 text-xs font-semibold uppercase tracking-[0.24em] text-[#5e7a66]">
-              <CheckIcon className="h-3.5 w-3.5" />
-              The Renova method
-            </p>
-            <h2 className="mt-5 text-balance text-3xl font-semibold tracking-[-0.04em] sm:text-4xl lg:text-5xl">
-              Premium care is not louder. It is more precise.
-            </h2>
-          </div>
-          <p className="text-base leading-7 text-[#52615a] sm:text-lg sm:leading-8">
-            A measured workflow keeps your procedure calm, hygienic, and predictable from design through recovery.
-          </p>
+<div>
+  <p className="inline-flex items-center gap-2 rounded-full border border-[#15231b]/10 bg-white/45 px-4 py-2 text-xs font-semibold uppercase tracking-[0.24em] text-[#5e7a66]">
+    <CheckIcon className="h-3.5 w-3.5" />
+    Hair Transplant Procedure
+  </p>
+
+  <h2 className="mt-5 text-balance text-3xl font-semibold tracking-[-0.04em] sm:text-4xl lg:text-5xl">
+    How Your Hair Transplant Is Performed
+  </h2>
+</div>
+
+<p className="text-base leading-7 text-[#52615a] sm:text-lg sm:leading-8">
+  Understand each stage of the procedure, from personalized planning and follicular extraction
+  to implantation and post-procedure care.
+</p>
         </div>
 
         <div className="mt-10 lg:hidden" data-reveal>
