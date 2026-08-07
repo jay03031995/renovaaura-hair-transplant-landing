@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import type { CSSProperties, FormEvent } from "react";
 import { Autoplay } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
+import emailjs from "@emailjs/browser";
 import "swiper/css";
 
 /* ---------------------------------- Brand / contact constants --------------------------------- */
@@ -11,11 +12,20 @@ const PHONE_TEL = "tel:+919205220070";
 const EMAIL_DISPLAY = "info@renovaaura.com";
 const EMAIL_MAILTO = "mailto:info@renovaaura.com";
 const BUSINESS_HOURS = "Mon-Sat: 10am-8pm";
-const WHATSAPP_URL =
-  "https://wa.me/919205220070?text=" +
-  encodeURIComponent("Hi Renova Aura, I would like to book a hair transplant consultation.");
 const INSTAGRAM_URL = "https://www.instagram.com/renovaaura.official/";
 const FACEBOOK_URL = "https://www.facebook.com/p/Renova-Aura-61589201577373/";
+
+const EMAILJS_SERVICE_ID =
+  import.meta.env.VITE_EMAILJS_SERVICE_ID ?? import.meta.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID;
+const EMAILJS_TEMPLATE_ID =
+  import.meta.env.VITE_EMAILJS_TEMPLATE_ID ?? import.meta.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID;
+const EMAILJS_AUTOREPLY_TEMPLATE_ID =
+  import.meta.env.VITE_EMAILJS_AUTOREPLY_TEMPLATE_ID ?? import.meta.env.NEXT_PUBLIC_EMAILJS_AUTOREPLY_TEMPLATE_ID;
+const EMAILJS_PUBLIC_KEY =
+  import.meta.env.VITE_EMAILJS_PUBLIC_KEY ?? import.meta.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY;
+const EMAILJS_AVAILABLE = Boolean(
+  EMAILJS_SERVICE_ID && EMAILJS_TEMPLATE_ID && EMAILJS_AUTOREPLY_TEMPLATE_ID && EMAILJS_PUBLIC_KEY,
+);
 const ADDRESS = "C-3, 1st floor, Anand Vihar, New Delhi, 110092";
 const MAPS_URL =
   "https://www.google.com/maps/search/?api=1&query=" +
@@ -426,6 +436,23 @@ export default function App() {
   const [openFaq, setOpenFaq] = useState(0);
   const [consultationOpen, setConsultationOpen] = useState(false);
 
+  useEffect(() => {
+    const timer = window.setTimeout(() => setConsultationOpen(true), 3000);
+
+    const handleScroll = () => {
+      if (window.scrollY + window.innerHeight >= document.body.scrollHeight / 2) {
+        setConsultationOpen(true);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
   useReveal();
 
   return (
@@ -440,9 +467,9 @@ export default function App() {
         <div className="aura-orb absolute -left-28 top-28 h-72 w-72 rounded-full bg-[#7c9a86]/30 blur-3xl" />
         <div className="aura-orb aura-orb-delayed absolute right-0 top-[38rem] h-96 w-96 rounded-full bg-[#2e4c3a]/15 blur-3xl" />
       </div>
-      <Header menuOpen={menuOpen} setMenuOpen={setMenuOpen} />
+      <Header menuOpen={menuOpen} setMenuOpen={setMenuOpen} onOpenConsultation={() => setConsultationOpen(true)} />
       <main id="main" className="relative z-10">
-        <Hero />
+        <Hero onOpenConsultation={() => setConsultationOpen(true)} />
         <Proof />
         <Method />
         <ResultsSection />
@@ -451,9 +478,9 @@ export default function App() {
         <DoctorProfile />
         <FAQ openFaq={openFaq} setOpenFaq={setOpenFaq} />
         <Visit />
-        <FinalCTA />
+        <FinalCTA onOpenConsultation={() => setConsultationOpen(true)} />
       </main>
-      <Footer />
+      <Footer onOpenConsultation={() => setConsultationOpen(true)} />
       <FloatingConsultation open={consultationOpen} setOpen={setConsultationOpen} />
     </div>
   );
@@ -461,7 +488,15 @@ export default function App() {
 
 /* -------------------------------------------- Header ------------------------------------------- */
 
-function Header({ menuOpen, setMenuOpen }: { menuOpen: boolean; setMenuOpen: (v: boolean) => void }) {
+function Header({
+  menuOpen,
+  setMenuOpen,
+  onOpenConsultation,
+}: {
+  menuOpen: boolean;
+  setMenuOpen: (v: boolean) => void;
+  onOpenConsultation: () => void;
+}) {
   return (
     <header className="fixed inset-x-0 top-0 z-50 px-3 pt-3 sm:px-5 lg:px-8 lg:pt-5">
       <nav
@@ -496,15 +531,14 @@ function Header({ menuOpen, setMenuOpen }: { menuOpen: boolean; setMenuOpen: (v:
             <PhoneIcon />
             {PHONE_DISPLAY}
           </a>
-          <a
-            href={WHATSAPP_URL}
-            target="_blank"
-            rel="noopener noreferrer"
+          <button
+            type="button"
+            onClick={onOpenConsultation}
             className="inline-flex items-center gap-2 rounded-full bg-[#1a3023] px-5 py-3 text-sm font-semibold text-white shadow-[0_14px_30px_rgba(26,48,35,0.24)] transition duration-300 hover:-translate-y-0.5 hover:bg-[#2a4634] focus:outline-none focus:ring-2 focus:ring-[#7c9a86] focus:ring-offset-2"
           >
-            <WhatsAppIcon />
+            <MailIcon />
             Book Appointment
-          </a>
+          </button>
         </div>
 
         <button
@@ -547,14 +581,16 @@ function Header({ menuOpen, setMenuOpen }: { menuOpen: boolean; setMenuOpen: (v:
             >
               <PhoneIcon /> Call
             </a>
-            <a
-              href={WHATSAPP_URL}
-              target="_blank"
-              rel="noopener noreferrer"
+            <button
+              type="button"
+              onClick={() => {
+                setMenuOpen(false);
+                onOpenConsultation();
+              }}
               className="inline-flex items-center justify-center gap-2 rounded-2xl bg-[#1a3023] px-4 py-3 text-sm font-semibold text-white"
             >
-              <WhatsAppIcon /> WhatsApp
-            </a>
+              <MailIcon /> Enquire
+            </button>
           </div>
         </div>
       </div>
@@ -564,7 +600,7 @@ function Header({ menuOpen, setMenuOpen }: { menuOpen: boolean; setMenuOpen: (v:
 
 /* --------------------------------------------- Hero -------------------------------------------- */
 
-function Hero() {
+function Hero({ onOpenConsultation }: { onOpenConsultation: () => void }) {
   return (
     <section id="top" className="relative flex min-h-[100svh] items-end overflow-hidden px-4 pb-10 pt-24 sm:px-6 sm:pb-12 sm:pt-32 lg:px-8 lg:pb-16 lg:pt-36 xl:pb-20">
       <div
@@ -606,16 +642,15 @@ function Hero() {
             ))}
           </div>
           <div className="mt-7 flex flex-col gap-3 sm:mt-8 sm:flex-row sm:flex-wrap sm:items-center">
-            <a
-              href={WHATSAPP_URL}
-              target="_blank"
-              rel="noopener noreferrer"
+            <button
+              type="button"
+              onClick={onOpenConsultation}
               className="group inline-flex w-full items-center justify-center gap-3 rounded-full bg-[#e4ebdd] px-5 py-3.5 text-base font-semibold text-[#15231b] shadow-[0_24px_60px_rgba(196,216,190,0.28)] transition duration-300 hover:-translate-y-1 hover:bg-white focus:outline-none focus:ring-2 focus:ring-[#c9d8bf] focus:ring-offset-2 focus:ring-offset-[#15231b] sm:w-auto sm:px-8"
             >
-              <WhatsAppIcon className="h-5 w-5 text-[#1a3023]" />
-              <span className="whitespace-nowrap">Book on WhatsApp</span>
+              <MailIcon className="h-5 w-5 text-[#1a3023]" />
+              <span className="whitespace-nowrap">Book appointment</span>
               <ArrowIcon className="h-5 w-5 shrink-0 transition-transform duration-300 group-hover:translate-x-1" />
-            </a>
+            </button>
             <a
               href={PHONE_TEL}
               className="inline-flex w-full items-center justify-center gap-2.5 rounded-full border border-white/30 px-5 py-3.5 text-base font-semibold text-white backdrop-blur-sm transition duration-300 hover:-translate-y-1 hover:border-white hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/70 sm:w-auto sm:px-6"
@@ -789,15 +824,9 @@ function ResultsSection() {
           <div data-reveal>
             <p className="text-base leading-7 text-[#52615a] sm:text-lg sm:leading-8">
               Drag each slider to compare before-and-after progress. Want to know what your own result could look
-              like? Send us clear photos on WhatsApp for candidacy review.
+              like? Send us clear photos for candidacy review.
             </p>
           </div>
-        </div>
-
-        <div className="mt-12 hidden gap-6 md:grid md:grid-cols-2 xl:grid-cols-3">
-          {results.map((item, index) => (
-            <ResultCard key={item.label} item={item} index={index} />
-          ))}
         </div>
 
         <div className="mt-12 md:hidden" data-reveal>
@@ -1248,12 +1277,12 @@ function Visit() {
                   <PhoneIcon />
                 </span>
                 <div>
-                  <h3 className="font-semibold text-[#15231b]">Call or WhatsApp</h3>
+                  <h3 className="font-semibold text-[#15231b]">Call or enquiry</h3>
                   <p className="mt-1 leading-7 text-[#52615a]">
                     <a href={PHONE_TEL} className="font-semibold text-[#2f5239] underline-offset-4 hover:underline">
                       {PHONE_DISPLAY}
                     </a>
-                    {" "} - {BUSINESS_HOURS}. Please confirm your slot before visiting.
+                    {" "}- {BUSINESS_HOURS}. Please open the enquiry form to book your appointment.
                   </p>
                 </div>
               </div>
@@ -1296,7 +1325,7 @@ function Visit() {
 
 /* ------------------------------------------- Final CTA ------------------------------------------ */
 
-function FinalCTA() {
+function FinalCTA({ onOpenConsultation }: { onOpenConsultation: () => void }) {
   return (
     <section className="px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
       <div
@@ -1312,15 +1341,14 @@ function FinalCTA() {
           a natural result could require - from the team at Anand Vihar, Delhi.
         </p>
         <div className="mt-9 flex flex-col justify-center gap-3 sm:flex-row">
-          <a
-            href={WHATSAPP_URL}
-            target="_blank"
-            rel="noopener noreferrer"
+          <button
+            type="button"
+            onClick={onOpenConsultation}
             className="inline-flex items-center justify-center gap-2.5 rounded-full bg-[#e4ebdd] px-7 py-4 text-base font-semibold text-[#15231b] transition duration-300 hover:-translate-y-1 hover:bg-white focus:outline-none focus:ring-2 focus:ring-[#c9d8bf] focus:ring-offset-2 focus:ring-offset-[#15231b]"
           >
-            <WhatsAppIcon className="h-5 w-5" />
-            Connect us on WhatsApp
-          </a>
+            <MailIcon className="h-5 w-5" />
+            Send enquiry
+          </button>
           <a
             href={PHONE_TEL}
             className="inline-flex items-center justify-center gap-2.5 rounded-full border border-white/25 px-7 py-4 text-base font-semibold text-white transition duration-300 hover:-translate-y-1 hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/70"
@@ -1342,28 +1370,83 @@ function FinalCTA() {
 
 function FloatingConsultation({ open, setOpen }: { open: boolean; setOpen: (value: boolean) => void }) {
   const [form, setForm] = useState({
-    name: "",
+    full_name: "",
+    email: "",
     phone: "",
+    city: "",
     concern: "",
-    preferredTime: "",
+    appointment_date: "",
+    appointment_time: "",
+    message: "",
   });
+  const [status, setStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
+  const [statusMessage, setStatusMessage] = useState<string>("");
 
   const updateField = (field: keyof typeof form, value: string) => {
     setForm((current) => ({ ...current, [field]: value }));
   };
 
-  const submitConsultation = (event: FormEvent<HTMLFormElement>) => {
+  const submitConsultation = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const message = [
-      "Hi Renova Aura, I would like to book a consultation.",
-      `Name: ${form.name}`,
-      `Phone: ${form.phone}`,
-      `Concern: ${form.concern || "Hair transplant consultation"}`,
-      `Preferred time: ${form.preferredTime || "Please suggest a suitable slot"}`,
-    ].join("\n");
+    if (!EMAILJS_AVAILABLE) {
+      setStatus("error");
+      setStatusMessage("Email service is not configured. Please check your environment variables.");
+      return;
+    }
 
-    window.open(`https://wa.me/919205220070?text=${encodeURIComponent(message)}`, "_blank", "noopener,noreferrer");
-    setOpen(false);
+    setStatus("sending");
+    setStatusMessage("");
+
+    try {
+      await emailjs.send(
+        EMAILJS_SERVICE_ID,
+        EMAILJS_TEMPLATE_ID,
+        {
+          full_name: form.full_name,
+          email: form.email,
+          phone: form.phone,
+          city: form.city,
+          concern: form.concern,
+          appointment_date: form.appointment_date,
+          appointment_time: form.appointment_time,
+          message: form.message,
+        },
+        EMAILJS_PUBLIC_KEY,
+      );
+
+      await emailjs.send(
+        EMAILJS_SERVICE_ID,
+        EMAILJS_AUTOREPLY_TEMPLATE_ID,
+        {
+          full_name: form.full_name,
+          email: form.email,
+          phone: form.phone,
+          city: form.city,
+          concern: form.concern,
+          appointment_date: form.appointment_date,
+          appointment_time: form.appointment_time,
+          message: form.message,
+        },
+        EMAILJS_PUBLIC_KEY,
+      );
+
+      setStatus("success");
+      setStatusMessage("Thanks! Your enquiry has been sent and we will reply shortly.");
+      setForm({
+        full_name: "",
+        email: "",
+        phone: "",
+        city: "",
+        concern: "",
+        appointment_date: "",
+        appointment_time: "",
+      });
+      window.setTimeout(() => setOpen(false), 2200);
+    } catch (error) {
+      console.error(error);
+      setStatus("error");
+      setStatusMessage("Something went wrong while sending your request. Please try again later.");
+    }
   };
 
   return (
@@ -1382,75 +1465,214 @@ function FloatingConsultation({ open, setOpen }: { open: boolean; setOpen: (valu
       {open ? (
         <div className="fixed inset-0 z-[80] flex items-end justify-center bg-[#07110b]/55 px-4 pb-4 backdrop-blur-sm sm:items-center sm:pb-0" role="dialog" aria-modal="true" aria-labelledby="consultation-title">
           <button type="button" className="absolute inset-0 cursor-default" aria-label="Close consultation form" onClick={() => setOpen(false)} />
-          <div className="relative w-full max-w-md rounded-[1.6rem] border border-white/70 bg-[#f8f8f2] p-5 shadow-[0_30px_100px_rgba(7,17,11,0.35)] sm:p-6">
-            <div className="flex items-start justify-between gap-4">
-              <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#5e7a66]">Free assessment</p>
-                <h2 id="consultation-title" className="mt-2 text-2xl font-semibold tracking-[-0.03em] text-[#15231b]">
-                  Book consultation
-                </h2>
-              </div>
-              <button
-                type="button"
-                onClick={() => setOpen(false)}
-                className="grid h-9 w-9 shrink-0 rotate-45 place-items-center rounded-full border border-[#15231b]/10 text-xl leading-none text-[#15231b] transition hover:bg-white"
-                aria-label="Close"
-              >
-                +
-              </button>
-            </div>
+        <div className="relative w-full max-w-3xl max-h-[90vh] overflow-y-auto rounded-[28px] border border-[#d9e2db] bg-[#f8f8f2] p-5 md:p-8 shadow-[0_30px_80px_rgba(7,17,11,0.25)]">
 
-            <form className="mt-5 space-y-3" onSubmit={submitConsultation}>
-              <label className="block">
-                <span className="text-sm font-semibold text-[#24382d]">Name</span>
-                <input
-                  required
-                  value={form.name}
-                  onChange={(event) => updateField("name", event.target.value)}
-                  className="mt-1.5 w-full rounded-2xl border border-[#15231b]/12 bg-white px-4 py-3 text-sm text-[#15231b] outline-none transition focus:border-[#6b8e6f] focus:ring-2 focus:ring-[#7c9a86]/30"
-                  placeholder="Your name"
-                />
-              </label>
-              <label className="block">
-                <span className="text-sm font-semibold text-[#24382d]">Phone</span>
-                <input
-                  required
-                  type="tel"
-                  value={form.phone}
-                  onChange={(event) => updateField("phone", event.target.value)}
-                  className="mt-1.5 w-full rounded-2xl border border-[#15231b]/12 bg-white px-4 py-3 text-sm text-[#15231b] outline-none transition focus:border-[#6b8e6f] focus:ring-2 focus:ring-[#7c9a86]/30"
-                  placeholder="+91 ..."
-                />
-              </label>
-              <label className="block">
-                <span className="text-sm font-semibold text-[#24382d]">Concern</span>
-                <textarea
-                  value={form.concern}
-                  onChange={(event) => updateField("concern", event.target.value)}
-                  rows={3}
-                  className="mt-1.5 w-full resize-none rounded-2xl border border-[#15231b]/12 bg-white px-4 py-3 text-sm text-[#15231b] outline-none transition focus:border-[#6b8e6f] focus:ring-2 focus:ring-[#7c9a86]/30"
-                  placeholder="Hairline, crown thinning, beard, eyebrow..."
-                />
-              </label>
-              <label className="block">
-                <span className="text-sm font-semibold text-[#24382d]">Preferred time</span>
-                <input
-                  value={form.preferredTime}
-                  onChange={(event) => updateField("preferredTime", event.target.value)}
-                  className="mt-1.5 w-full rounded-2xl border border-[#15231b]/12 bg-white px-4 py-3 text-sm text-[#15231b] outline-none transition focus:border-[#6b8e6f] focus:ring-2 focus:ring-[#7c9a86]/30"
-                  placeholder="Today evening, tomorrow morning..."
-                />
-              </label>
+  {/* Header */}
+  <div className="mb-6 flex items-start justify-between">
+    <div>
+      <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#6b8e6f]">
+        Book Assessment
+      </p>
 
-              <button
-                type="submit"
-                className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#1a3023] px-5 py-3.5 text-base font-semibold text-white transition hover:bg-[#2a4634] focus:outline-none focus:ring-2 focus:ring-[#7c9a86]"
-              >
-                <WhatsAppIcon className="h-5 w-5" />
-                Send on WhatsApp
-              </button>
-            </form>
-          </div>
+      <h2
+        id="consultation-title"
+        className="mt-2 text-3xl font-semibold text-[#15231b]"
+      >
+        Book Consultation
+      </h2>
+
+      <p className="mt-2 text-sm text-[#5d6b62]">
+        Fill in your details and our hair transplant specialist will contact you shortly.
+      </p>
+    </div>
+
+    <button
+      type="button"
+      onClick={() => setOpen(false)}
+      className="grid h-10 w-10 place-items-center rounded-full border border-[#d9e2db] text-xl transition hover:bg-white"
+    >
+      ✕
+    </button>
+  </div>
+
+  <form
+    onSubmit={submitConsultation}
+    className="space-y-5"
+  >
+
+    <div className="grid gap-4 md:grid-cols-2">
+
+      {/* Full Name */}
+
+      <label>
+        <span className="mb-2 block text-sm font-semibold text-[#24382d]">
+          Full Name *
+        </span>
+
+        <input
+          required
+          name="full_name"
+          value={form.full_name}
+          onChange={(e)=>updateField("full_name",e.target.value)}
+          placeholder="John Doe"
+          className="w-full rounded-xl border border-[#d6ddd8] bg-white px-4 py-3 outline-none focus:border-[#6b8e6f]"
+        />
+      </label>
+
+      {/* Email */}
+
+      <label>
+        <span className="mb-2 block text-sm font-semibold text-[#24382d]">
+          Email
+        </span>
+
+        <input
+          type="email"
+          required
+          name="email"
+          value={form.email}
+          onChange={(e)=>updateField("email",e.target.value)}
+          placeholder="john@example.com"
+          className="w-full rounded-xl border border-[#d6ddd8] bg-white px-4 py-3 outline-none focus:border-[#6b8e6f]"
+        />
+      </label>
+
+      {/* Phone */}
+
+      <label>
+        <span className="mb-2 block text-sm font-semibold text-[#24382d]">
+          Phone *
+        </span>
+
+        <input
+          required
+          type="tel"
+          name="phone"
+          value={form.phone}
+          onChange={(e)=>updateField("phone",e.target.value)}
+          placeholder="+91 9876543210"
+          className="w-full rounded-xl border border-[#d6ddd8] bg-white px-4 py-3 outline-none focus:border-[#6b8e6f]"
+        />
+      </label>
+
+      {/* City */}
+
+      <label>
+        <span className="mb-2 block text-sm font-semibold text-[#24382d]">
+          City
+        </span>
+
+        <input
+          name="city"
+          value={form.city}
+          onChange={(e)=>updateField("city",e.target.value)}
+          placeholder="Delhi / Noida"
+          className="w-full rounded-xl border border-[#d6ddd8] bg-white px-4 py-3 outline-none focus:border-[#6b8e6f]"
+        />
+      </label>
+
+    </div>
+
+    {/* Concern */}
+
+    <label className="block">
+      <span className="mb-2 block text-sm font-semibold text-[#24382d]">
+        Concern
+      </span>
+
+      <select
+        name="concern"
+        value={form.concern}
+        onChange={(e)=>updateField("concern",e.target.value)}
+        className="w-full rounded-xl border border-[#d6ddd8] bg-white px-4 py-3 outline-none focus:border-[#6b8e6f]"
+      >
+        <option value="">Select Concern</option>
+        <option>Hair Transplant</option>
+        <option>Hair Loss</option>
+        <option>PRP Therapy</option>
+        <option>Beard Transplant</option>
+        <option>Eyebrow Transplant</option>
+        <option>Scalp Treatment</option>
+        <option>Other</option>
+      </select>
+    </label>
+
+    {/* Date & Time */}
+
+    <div className="grid gap-4 md:grid-cols-2">
+
+      <label>
+        <span className="mb-2 block text-sm font-semibold text-[#24382d]">
+          Appointment Date
+        </span>
+
+        <input
+          type="date"
+          name="appointment_date"
+          value={form.appointment_date}
+          onChange={(e)=>updateField("appointment_date",e.target.value)}
+          className="w-full rounded-xl border border-[#d6ddd8] bg-white px-4 py-3 outline-none focus:border-[#6b8e6f]"
+        />
+      </label>
+
+      <label>
+        <span className="mb-2 block text-sm font-semibold text-[#24382d]">
+          Appointment Time
+        </span>
+
+        <input
+          type="time"
+          name="appointment_time"
+          value={form.appointment_time}
+          onChange={(e)=>updateField("appointment_time",e.target.value)}
+          className="w-full rounded-xl border border-[#d6ddd8] bg-white px-4 py-3 outline-none focus:border-[#6b8e6f]"
+        />
+      </label>
+
+    </div>
+
+    {/* Message */}
+
+    {/* <label>
+      <span className="mb-2 block text-sm font-semibold text-[#24382d]">
+        Message
+      </span>
+
+      <textarea
+        rows={3}
+        name="message"
+        value={form.message}
+        onChange={(e)=>updateField("message",e.target.value)}
+        placeholder="Share any additional information..."
+        className="w-full resize-none rounded-xl border border-[#d6ddd8] bg-white px-4 py-3 outline-none focus:border-[#6b8e6f]"
+      />
+    </label> */}
+
+    {statusMessage && (
+      <div
+        className={`rounded-xl px-4 py-3 text-sm ${
+          status === "success"
+            ? "bg-green-100 text-green-700"
+            : "bg-red-100 text-red-700"
+        }`}
+      >
+        {statusMessage}
+      </div>
+    )}
+
+    <button
+      type="submit"
+      disabled={status==="sending"}
+      className="w-full rounded-xl bg-[#2f5d4c] py-4 text-lg font-semibold text-white transition hover:bg-[#274c3d] disabled:opacity-60"
+    >
+      {status==="sending"
+        ? "Sending..."
+        : "Book Consultation"}
+    </button>
+
+  </form>
+
+</div>
         </div>
       ) : null}
     </>
@@ -1459,7 +1681,7 @@ function FloatingConsultation({ open, setOpen }: { open: boolean; setOpen: (valu
 
 /* -------------------------------------------- Footer ------------------------------------------- */
 
-function Footer() {
+function Footer({ onOpenConsultation }: { onOpenConsultation: () => void }) {
   return (
     <footer className="relative z-10 px-4 pb-10 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-7xl border-t border-[#15231b]/10 pt-10">
@@ -1504,15 +1726,14 @@ function Footer() {
               >
                 <FacebookIcon />
               </a>
-              <a
-                href={WHATSAPP_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Renova Aura on WhatsApp"
+              <button
+                type="button"
+                onClick={onOpenConsultation}
+                aria-label="Open enquiry form"
                 className="grid h-10 w-10 place-items-center rounded-full border border-[#15231b]/12 text-[#2b4235] transition duration-300 hover:-translate-y-0.5 hover:bg-[#1a3023] hover:text-white"
               >
-                <WhatsAppIcon className="h-5 w-5" />
-              </a>
+                <MailIcon className="h-5 w-5" />
+              </button>
             </div>
           </div>
 
