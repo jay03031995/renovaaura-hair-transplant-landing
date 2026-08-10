@@ -437,18 +437,23 @@ export default function App() {
   const [consultationOpen, setConsultationOpen] = useState(false);
 
   useEffect(() => {
-    const timer = window.setTimeout(() => setConsultationOpen(true), 3000);
+    let hasShownScrollConsultation = false;
 
     const handleScroll = () => {
-      if (window.scrollY + window.innerHeight >= document.body.scrollHeight / 2) {
+      const scrollMiddle = document.documentElement.scrollHeight / 2;
+      const viewportMiddle = window.scrollY + window.innerHeight / 2;
+
+      if (!hasShownScrollConsultation && viewportMiddle >= scrollMiddle) {
+        hasShownScrollConsultation = true;
         setConsultationOpen(true);
+        window.removeEventListener("scroll", handleScroll);
       }
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll();
 
     return () => {
-      clearTimeout(timer);
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
@@ -844,13 +849,18 @@ function ResultsSection() {
             className="overflow-visible"
           >
             {results.map((item, index) => (
-              <SwiperSlide key={item.label} className="!h-auto">
+              <SwiperSlide key={`${item.label}-${index}`} className="!h-auto">
                 <ResultCard item={item} index={index} />
               </SwiperSlide>
             ))}
           </Swiper>
         </div>
 
+        <div className="mt-12 hidden gap-6 md:grid md:grid-cols-2 xl:grid-cols-3" data-reveal>
+          {results.map((item, index) => (
+            <ResultCard key={`${item.label}-${index}`} item={item} index={index} />
+          ))}
+        </div>
       </div>
     </section>
   );
@@ -1440,6 +1450,7 @@ function FloatingConsultation({ open, setOpen }: { open: boolean; setOpen: (valu
         concern: "",
         appointment_date: "",
         appointment_time: "",
+        message: "",
       });
       window.setTimeout(() => setOpen(false), 2200);
     } catch (error) {
