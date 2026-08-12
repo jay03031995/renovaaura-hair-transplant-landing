@@ -1,17 +1,28 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useId, useMemo, useState } from "react";
 import type { CSSProperties, FormEvent } from "react";
 import { Autoplay } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import emailjs from "@emailjs/browser";
 import "swiper/css";
 
+declare global {
+  interface Window {
+    dataLayer?: Record<string, unknown>[];
+  }
+}
+
 /* ---------------------------------- Brand / contact constants --------------------------------- */
 
 const PHONE_DISPLAY = "+91 92052 20070";
 const PHONE_TEL = "tel:+919205220070";
+const WHATSAPP_URL =
+  "https://wa.me/919205220070?text=" +
+  encodeURIComponent("Hi, I'd like a hair transplant assessment");
 const EMAIL_DISPLAY = "info@renovaaura.com";
 const EMAIL_MAILTO = "mailto:info@renovaaura.com";
 const BUSINESS_HOURS = "Mon-Sat: 10am-8pm";
+const PRIMARY_CTA = "Book free consultation";
+const WHATSAPP_CTA = "WhatsApp assessment";
 const INSTAGRAM_URL = "https://www.instagram.com/renovaaura.official/";
 const FACEBOOK_URL = "https://www.facebook.com/p/Renova-Aura-61589201577373/";
 
@@ -33,13 +44,27 @@ const MAPS_URL =
 const MAPS_EMBED =
   "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3501.209440367935!2d77.30696542555364!3d28.65344692565341!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390cfbe2a421adb7%3A0xf631ccc92514fec0!2sDr.%20Bhawna%20Bhardwaj%20-%20Dermatologist%20%7C%20Renovaaura!5e0!3m2!1sen!2sin!4v1785842466361!5m2!1sen!2sin";
 
-const heroImage =
-  "/images/hero.jpeg";
-const brandLogo = "/images/renovaaura-logo.png";
+function pushEvent(event: string, params: Record<string, unknown> = {}) {
+  window.dataLayer = window.dataLayer || [];
+  window.dataLayer.push({ event, ...params });
+}
+
+function trackCall() {
+  pushEvent("click_to_call", { location: "landing_page", phone: PHONE_DISPLAY });
+}
+
+function trackWhatsApp() {
+  pushEvent("click_whatsapp", { location: "landing_page" });
+}
+
+const heroImage = "/images/optimized/hero-1280.webp";
+const heroImageMobile = "/images/optimized/hero-640.webp";
+const brandLogo = "/images/renova-aura-logo.svg";
 
 const navItems = [
   { label: "Results", href: "#results" },
   { label: "Method", href: "#method" },
+  { label: "Cost", href: "#pricing" },
   { label: "Doctor", href: "#doctor" },
   { label: "FAQ", href: "#faq" },
   { label: "Visit Us", href: "#visit" },
@@ -55,6 +80,35 @@ const trustChips = [
   "Surgeon-Led Hair Transplants",
   "Natural Hairline Design",
   "EMI Plans Available",
+];
+
+const pricingPlans = [
+  {
+    title: "Hairline refinement",
+    grafts: "1,500-2,500 grafts",
+    price: "₹45,000-₹85,000",
+    emi: "0% EMI from ₹3,750/month",
+  },
+  {
+    title: "Frontal to mid-scalp",
+    grafts: "2,500-3,500 grafts",
+    price: "₹75,000-₹1,25,000",
+    emi: "0% EMI from ₹6,250/month",
+  },
+  {
+    title: "High coverage planning",
+    grafts: "3,500-4,500 grafts",
+    price: "₹1,10,000-₹1,80,000",
+    emi: "0% EMI from ₹9,167/month",
+  },
+];
+
+const pricingIncludes = [
+  "Doctor consultation and hairline planning",
+  "Graft count documentation",
+  "Local anaesthesia and procedure consumables",
+  "Post-procedure medicines guidance",
+  "Follow-up reviews during recovery",
 ];
 
 const methodSteps = [
@@ -99,47 +153,47 @@ const methodSteps = [
 const features = [
   "Donor-safe graft planning",
   "Natural hairline design",
-  "FUE and DHT techniques",
+  "FUE and DHI techniques",
   "EMI plans available",
   "Regular follow-ups",
 ];
 
 const results = [
   {
-    before: "/images/a1.jpeg",
-    after: "/images/b1.jpeg",
+    before: "/images/optimized/a1-600.webp",
+    after: "/images/optimized/b1-600.webp",
     beforeAlt: "Patient before hair transplant showing a receding frontal hairline",
     afterAlt: "Patient after hair transplant showing a restored frontal hairline",
     label: "FUE - Frontal Hairline",
     note: "3,000 Grafts • 12-Month Result",
   },
   {
-    before: "/images/a2.jpeg",
-    after: "/images/b2.jpeg",
+    before: "/images/optimized/a2-600.webp",
+    after: "/images/optimized/b2-600.webp",
     beforeAlt: "Patient before hair transplant showing crown thinning",
     afterAlt: "Patient after hair transplant showing restored crown density",
     label: "Frontal Hairline",
     note: "2,500 Grafts • 13-Month Result",
   },
   {
-    before: "/images/a3.jpeg",
-    after: "/images/b3.jpeg",
+    before: "/images/optimized/a3-600.webp",
+    after: "/images/optimized/b3-600.webp",
     beforeAlt: "Patient before hair transplant showing temple recession",
     afterAlt: "Patient after hair transplant showing restored temples",
     label: "Full Coverage",
     note: "4,000 Grafts • 8-Month Result",
   },
   {
-    before: "/images/a4.jpeg",
-    after: "/images/b4.jpeg",
+    before: "/images/optimized/a4-600.webp",
+    after: "/images/optimized/b4-600.webp",
     beforeAlt: "Patient before hair transplant showing frontal hairline recession",
     afterAlt: "Patient after hair transplant showing a denser and natural frontal hairline",
     label: "Frontal to Mid Coverage",
     note: "3,000 Grafts • 15-Month Result",
   },
   {
-    before: "/images/a5.jpeg",
-    after: "/images/b5.jpeg",
+    before: "/images/optimized/a5-600.webp",
+    after: "/images/optimized/b5-600.webp",
     beforeAlt: "Patient before hair transplant showing frontal hair loss",
     afterAlt: "Patient after hair transplant showing restored frontal density",
     label: "Frontal Hairline",
@@ -436,6 +490,11 @@ export default function App() {
   const [openFaq, setOpenFaq] = useState(0);
   const [consultationOpen, setConsultationOpen] = useState(false);
 
+  const openConsultation = () => {
+    pushEvent("lead_form_open", { source: "landing_page" });
+    setConsultationOpen(true);
+  };
+
   useEffect(() => {
     let hasShownScrollConsultation = false;
 
@@ -445,7 +504,7 @@ export default function App() {
 
       if (!hasShownScrollConsultation && viewportMiddle >= scrollMiddle) {
         hasShownScrollConsultation = true;
-        setConsultationOpen(true);
+        openConsultation();
         window.removeEventListener("scroll", handleScroll);
       }
     };
@@ -472,20 +531,22 @@ export default function App() {
         <div className="aura-orb absolute -left-28 top-28 h-72 w-72 rounded-full bg-[#7c9a86]/30 blur-3xl" />
         <div className="aura-orb aura-orb-delayed absolute right-0 top-[38rem] h-96 w-96 rounded-full bg-[#2e4c3a]/15 blur-3xl" />
       </div>
-      <Header menuOpen={menuOpen} setMenuOpen={setMenuOpen} onOpenConsultation={() => setConsultationOpen(true)} />
+      <Header menuOpen={menuOpen} setMenuOpen={setMenuOpen} onOpenConsultation={openConsultation} />
       <main id="main" className="relative z-10">
-        <Hero onOpenConsultation={() => setConsultationOpen(true)} />
+        <Hero onOpenConsultation={openConsultation} />
         <Proof />
         <Method />
         <ResultsSection />
         <Benefits />
+        <Pricing />
         <Testimonials />
         <DoctorProfile />
         <FAQ openFaq={openFaq} setOpenFaq={setOpenFaq} />
         <Visit />
-        <FinalCTA onOpenConsultation={() => setConsultationOpen(true)} />
+        <FinalCTA onOpenConsultation={openConsultation} />
       </main>
-      <Footer onOpenConsultation={() => setConsultationOpen(true)} />
+      <MobileActionBar />
+      <Footer onOpenConsultation={openConsultation} />
       <FloatingConsultation open={consultationOpen} setOpen={setConsultationOpen} />
     </div>
   );
@@ -512,6 +573,8 @@ function Header({
           <img
             src={brandLogo}
             alt="Renova Aura logo"
+            width="600"
+            height="180"
             className="block h-auto w-[135px] transition-transform duration-300 group-hover:scale-[1.02] sm:w-[155px] lg:w-[170px]"
           />
         </a>
@@ -531,6 +594,7 @@ function Header({
         <div className="hidden items-center gap-2 lg:flex">
           <a
             href={PHONE_TEL}
+            onClick={trackCall}
             className="inline-flex items-center gap-2 rounded-full border border-[#15231b]/12 px-3.5 py-2.5 text-sm font-semibold text-[#2b4235] transition duration-300 hover:-translate-y-0.5 hover:bg-white focus:outline-none focus:ring-2 focus:ring-[#7c9a86]"
           >
             <PhoneIcon />
@@ -542,8 +606,18 @@ function Header({
             className="inline-flex items-center gap-2 rounded-full bg-[#1a3023] px-5 py-3 text-sm font-semibold text-white shadow-[0_14px_30px_rgba(26,48,35,0.24)] transition duration-300 hover:-translate-y-0.5 hover:bg-[#2a4634] focus:outline-none focus:ring-2 focus:ring-[#7c9a86] focus:ring-offset-2"
           >
             <MailIcon />
-            Book Appointment
+            {PRIMARY_CTA}
           </button>
+          <a
+            href={WHATSAPP_URL}
+            onClick={trackWhatsApp}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 rounded-full border border-[#15231b]/12 px-3.5 py-2.5 text-sm font-semibold text-[#2b4235] transition duration-300 hover:-translate-y-0.5 hover:bg-white focus:outline-none focus:ring-2 focus:ring-[#7c9a86]"
+          >
+            <WhatsAppIcon />
+            WhatsApp
+          </a>
         </div>
 
         <button
@@ -582,6 +656,7 @@ function Header({
           <div className="mt-2 grid grid-cols-2 gap-2">
             <a
               href={PHONE_TEL}
+              onClick={trackCall}
               className="inline-flex items-center justify-center gap-2 rounded-2xl border border-[#15231b]/12 px-4 py-3 text-sm font-semibold text-[#2b4235]"
             >
               <PhoneIcon /> Call
@@ -594,8 +669,17 @@ function Header({
               }}
               className="inline-flex items-center justify-center gap-2 rounded-2xl bg-[#1a3023] px-4 py-3 text-sm font-semibold text-white"
             >
-              <MailIcon /> Enquire
+              <MailIcon /> Book
             </button>
+            <a
+              href={WHATSAPP_URL}
+              onClick={trackWhatsApp}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="col-span-2 inline-flex items-center justify-center gap-2 rounded-2xl border border-[#15231b]/12 px-4 py-3 text-sm font-semibold text-[#2b4235]"
+            >
+              <WhatsAppIcon /> {WHATSAPP_CTA}
+            </a>
           </div>
         </div>
       </div>
@@ -608,11 +692,18 @@ function Header({
 function Hero({ onOpenConsultation }: { onOpenConsultation: () => void }) {
   return (
     <section id="top" className="relative flex min-h-[100svh] items-end overflow-hidden px-4 pb-10 pt-24 sm:px-6 sm:pb-12 sm:pt-32 lg:px-8 lg:pb-16 lg:pt-36 xl:pb-20">
-      <div
-        className="absolute inset-0 scale-105 bg-cover bg-center motion-safe:animate-[heroDrift_22s_ease-in-out_infinite_alternate]"
-        style={{ backgroundImage: `url(${heroImage})` }}
-        aria-hidden="true"
-      />
+      <picture aria-hidden="true">
+        <source srcSet={heroImageMobile} media="(max-width: 640px)" />
+        <img
+          src={heroImage}
+          alt=""
+          width="1280"
+          height="960"
+          fetchPriority="high"
+          decoding="async"
+          className="absolute inset-0 h-full w-full scale-105 object-cover motion-safe:animate-[heroDrift_22s_ease-in-out_infinite_alternate]"
+        />
+      </picture>
       <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(13,25,18,0.93)_0%,rgba(17,32,23,0.8)_36%,rgba(21,35,27,0.3)_66%,rgba(21,35,27,0.14)_100%)]" />
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_35%,rgba(124,154,134,0.24),transparent_30%),linear-gradient(0deg,rgba(13,25,18,0.7),transparent_44%)]" />
 
@@ -628,7 +719,7 @@ function Hero({ onOpenConsultation }: { onOpenConsultation: () => void }) {
 
 <p className="mt-3 max-w-2xl text-pretty text-sm leading-7 text-[#e9efe1]/88 sm:text-base sm:leading-8 lg:text-lg">
   Consult Dr. Bhawna Bhardwaj for personalized hair restoration. Our surgeon-led
-  FUE and DHT procedures focus on natural hairlines, minimal graft wastage,
+  FUE and DHI procedures focus on natural hairlines, minimal graft wastage,
   transparent graft counts, and long-term planning for lasting results.
 </p>
           <div className="mt-5 flex flex-col items-start gap-2.5 sm:flex-row sm:flex-wrap">
@@ -653,11 +744,22 @@ function Hero({ onOpenConsultation }: { onOpenConsultation: () => void }) {
               className="group inline-flex w-full items-center justify-center gap-3 rounded-full bg-[#e4ebdd] px-5 py-3.5 text-base font-semibold text-[#15231b] shadow-[0_24px_60px_rgba(196,216,190,0.28)] transition duration-300 hover:-translate-y-1 hover:bg-white focus:outline-none focus:ring-2 focus:ring-[#c9d8bf] focus:ring-offset-2 focus:ring-offset-[#15231b] sm:w-auto sm:px-8"
             >
               <MailIcon className="h-5 w-5 text-[#1a3023]" />
-              <span className="whitespace-nowrap">Book appointment</span>
+              <span className="whitespace-nowrap">{PRIMARY_CTA}</span>
               <ArrowIcon className="h-5 w-5 shrink-0 transition-transform duration-300 group-hover:translate-x-1" />
             </button>
             <a
+              href={WHATSAPP_URL}
+              onClick={trackWhatsApp}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex w-full items-center justify-center gap-2.5 rounded-full bg-[#25d366] px-5 py-3.5 text-base font-semibold text-[#0b2816] transition duration-300 hover:-translate-y-1 hover:bg-[#35e074] focus:outline-none focus:ring-2 focus:ring-white/70 sm:w-auto sm:px-6"
+            >
+              <WhatsAppIcon className="h-5 w-5" />
+              <span className="whitespace-nowrap">{WHATSAPP_CTA}</span>
+            </a>
+            <a
               href={PHONE_TEL}
+              onClick={trackCall}
               className="inline-flex w-full items-center justify-center gap-2.5 rounded-full border border-white/30 px-5 py-3.5 text-base font-semibold text-white backdrop-blur-sm transition duration-300 hover:-translate-y-1 hover:border-white hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/70 sm:w-auto sm:px-6"
             >
               <PhoneIcon />
@@ -868,7 +970,7 @@ function ResultsSection() {
 
 function ResultCard({ item, index }: { item: (typeof results)[number]; index: number }) {
   const [position, setPosition] = useState(52);
-  const sliderId = `result-slider-${index}`;
+  const sliderId = useId();
 
   const afterStyle = useMemo<CSSProperties>(
     () => ({ clipPath: `inset(0 ${100 - position}% 0 0)` }),
@@ -882,8 +984,8 @@ function ResultCard({ item, index }: { item: (typeof results)[number]; index: nu
       style={{ transitionDelay: `${index * 90}ms` }}
     >
       <div className="relative aspect-[1.12/1] overflow-hidden rounded-[1.45rem] bg-[#6B8E6F]">
-        <img src={item.before} alt={item.beforeAlt} className="absolute inset-0 h-full w-full object-cover" loading="lazy" />
-        <img src={item.after} alt={item.afterAlt} className="absolute inset-0 h-full w-full object-cover" style={afterStyle} loading="lazy" />
+        <img src={item.before} alt={item.beforeAlt} width="600" height="600" className="absolute inset-0 h-full w-full object-cover" loading="lazy" decoding="async" />
+        <img src={item.after} alt={item.afterAlt} width="600" height="600" className="absolute inset-0 h-full w-full object-cover" style={afterStyle} loading="lazy" decoding="async" />
         <div className="absolute inset-y-0 w-0.5 bg-white shadow-[0_0_28px_rgba(255,255,255,0.9)]" style={{ left: `${position}%` }}>
           <div className="absolute left-1/2 top-1/2 grid h-11 w-11 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border border-white/70 bg-white/75 text-[#1a3023] shadow-xl backdrop-blur-xl transition duration-300 group-hover:scale-105">
             <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -914,6 +1016,7 @@ function ResultCard({ item, index }: { item: (typeof results)[number]; index: nu
       <input
         id={sliderId}
         type="range"
+        aria-label={`Compare before and after, patient ${index + 1}`}
         min="0"
         max="100"
         value={position}
@@ -934,10 +1037,13 @@ function Benefits() {
         <div className="grid lg:grid-cols-[1.02fr_0.98fr]">
           <div className="relative min-h-[20rem] overflow-hidden lg:min-h-0">
             <img
-              src="/images/why.jpeg"
+              src="/images/optimized/why-776.webp"
               alt="Patient speaking with a care coordinator at a modern clinic"
+              width="776"
+              height="1058"
               className="absolute inset-0 h-full w-full object-cover"
               loading="lazy"
+              decoding="async"
             />
             <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(21,35,27,0.0),rgba(21,35,27,0.34)),linear-gradient(0deg,rgba(21,35,27,0.55),transparent_55%)]" />
           </div>
@@ -962,6 +1068,72 @@ function Benefits() {
               ))}
             </div>
           </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ------------------------------------------- Pricing ------------------------------------------- */
+
+function Pricing() {
+  return (
+    <section id="pricing" className="bg-[#f8f8f2] px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
+      <div className="mx-auto max-w-7xl">
+        <div className="grid gap-8 lg:grid-cols-[0.85fr_1.15fr] lg:items-end" data-reveal>
+          <div>
+            <p className="inline-flex items-center gap-2 rounded-full border border-[#15231b]/10 bg-white/70 px-4 py-2 text-xs font-semibold uppercase tracking-[0.24em] text-[#5e7a66]">
+              <SparkIcon className="h-3.5 w-3.5" />
+              Hair transplant cost
+            </p>
+            <h2 className="mt-5 text-balance text-3xl font-semibold tracking-[-0.04em] text-[#15231b] sm:text-4xl lg:text-5xl">
+              Transparent INR pricing before you visit.
+            </h2>
+          </div>
+          <p className="text-base leading-7 text-[#52615a] sm:text-lg sm:leading-8">
+            Hair transplant pricing depends on graft count, donor quality, and coverage goals. These ranges help you
+            plan; your final quote is confirmed only after Dr. Bhawna reviews your scalp photos and donor area.
+          </p>
+        </div>
+
+        <div className="mt-10 grid gap-4 lg:grid-cols-3">
+          {pricingPlans.map((plan, index) => (
+            <article
+              key={plan.title}
+              className="rounded-[1.6rem] border border-[#15231b]/10 bg-white p-5 shadow-[0_22px_70px_rgba(37,58,45,0.09)] sm:p-6"
+              data-reveal
+              style={{ transitionDelay: `${index * 80}ms` }}
+            >
+              <h3 className="text-xl font-semibold tracking-[-0.02em] text-[#15231b]">{plan.title}</h3>
+              <p className="mt-3 text-sm font-semibold uppercase tracking-[0.16em] text-[#6b8e6f]">{plan.grafts}</p>
+              <p className="mt-5 text-3xl font-semibold tracking-[-0.04em] text-[#1a3023]">{plan.price}</p>
+              <p className="mt-3 rounded-full bg-[#e8efe4] px-4 py-2 text-sm font-semibold text-[#2f5239]">{plan.emi}</p>
+            </article>
+          ))}
+        </div>
+
+        <div className="mt-6 grid gap-5 rounded-[1.6rem] border border-[#15231b]/10 bg-white/70 p-5 sm:p-6 lg:grid-cols-[1fr_auto] lg:items-center" data-reveal>
+          <div>
+            <h3 className="text-lg font-semibold text-[#15231b]">Included in your plan</h3>
+            <div className="mt-4 grid gap-2 sm:grid-cols-2">
+              {pricingIncludes.map((item) => (
+                <p key={item} className="flex items-start gap-2 text-sm font-medium leading-6 text-[#52615a]">
+                  <CheckIcon className="mt-1 h-3.5 w-3.5 shrink-0 text-[#2f5239]" />
+                  {item}
+                </p>
+              ))}
+            </div>
+          </div>
+          <a
+            href={WHATSAPP_URL}
+            onClick={trackWhatsApp}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center justify-center gap-2 rounded-full bg-[#1a3023] px-6 py-3 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:bg-[#2a4634]"
+          >
+            <WhatsAppIcon className="h-5 w-5" />
+            Send photos for quote
+          </a>
         </div>
       </div>
     </section>
@@ -1138,7 +1310,7 @@ function ReviewCard({ review, large = false }: { review: (typeof googleReviews)[
 function DoctorProfile() {
   const credentials = [
     { icon: AwardIcon, label: "15+ Years of Expertise" },
-    { icon: ShieldCheckIcon, label: "Doctor-led DHT & FUE Surgery" },
+    { icon: ShieldCheckIcon, label: "Doctor-led DHI & FUE Surgery" },
     { icon: UsersIcon, label: "5,000+ Happy Patients" },
     { icon: MessageCircleIcon, label: "Reviews 5.0/5" },
   ];
@@ -1163,7 +1335,7 @@ function DoctorProfile() {
               transplant surgeon whose practice combines medical dermatology with surgical hair restoration. She trained
               in skin & VD at a leading Indian medical institution and has spent the last <strong>15+ years</strong>{" "}
               building expertise across acne and scar management, melasma protocols calibrated for Indian skin, surgical
-              hair transplant techniques (FUE, DHT, beard, eyebrow), and energy-based aesthetic devices.
+              hair transplant techniques (FUE, DHI, beard, eyebrow), and energy-based aesthetic devices.
             </p>
 
             <p className="mt-4 text-gray-700">
@@ -1172,6 +1344,7 @@ function DoctorProfile() {
 
             <a
               href={PHONE_TEL}
+              onClick={trackCall}
               className="mt-6 inline-flex items-center justify-center gap-2 rounded-lg bg-[#1a3023] px-6 py-3 text-base font-semibold text-white transition-all duration-300 hover:bg-[#2a4634]"
             >
               <PhoneIcon className="h-5 w-5" />
@@ -1186,6 +1359,8 @@ function DoctorProfile() {
               width="500"
               height="600"
               className="h-auto w-full object-cover"
+              loading="lazy"
+              decoding="async"
             />
           </div>
         </div>
@@ -1287,13 +1462,33 @@ function Visit() {
                   <PhoneIcon />
                 </span>
                 <div>
-                  <h3 className="font-semibold text-[#15231b]">Call or enquiry</h3>
+                  <h3 className="font-semibold text-[#15231b]">Call the clinic</h3>
                   <p className="mt-1 leading-7 text-[#52615a]">
-                    <a href={PHONE_TEL} className="font-semibold text-[#2f5239] underline-offset-4 hover:underline">
+                    <a href={PHONE_TEL} onClick={trackCall} className="font-semibold text-[#2f5239] underline-offset-4 hover:underline">
                       {PHONE_DISPLAY}
                     </a>
-                    {" "}- {BUSINESS_HOURS}. Please open the enquiry form to book your appointment.
                   </p>
+                  <p className="mt-1 text-sm font-medium text-[#6e8075]">{BUSINESS_HOURS}</p>
+                  <div className="mt-4 flex flex-wrap gap-2">
+                    <a
+                      href={WHATSAPP_URL}
+                      onClick={trackWhatsApp}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 rounded-full bg-[#1a3023] px-4 py-2 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:bg-[#2a4634]"
+                    >
+                      <WhatsAppIcon />
+                      {WHATSAPP_CTA}
+                    </a>
+                    <a
+                      href={PHONE_TEL}
+                      onClick={trackCall}
+                      className="inline-flex items-center gap-2 rounded-full border border-[#15231b]/12 px-4 py-2 text-sm font-semibold text-[#2b4235] transition hover:-translate-y-0.5 hover:bg-white"
+                    >
+                      <PhoneIcon />
+                      Call now
+                    </a>
+                  </div>
                 </div>
               </div>
               <div className="flex gap-4 border-t border-[#15231b]/10 pt-6">
@@ -1357,10 +1552,21 @@ function FinalCTA({ onOpenConsultation }: { onOpenConsultation: () => void }) {
             className="inline-flex items-center justify-center gap-2.5 rounded-full bg-[#e4ebdd] px-7 py-4 text-base font-semibold text-[#15231b] transition duration-300 hover:-translate-y-1 hover:bg-white focus:outline-none focus:ring-2 focus:ring-[#c9d8bf] focus:ring-offset-2 focus:ring-offset-[#15231b]"
           >
             <MailIcon className="h-5 w-5" />
-            Send enquiry
+            {PRIMARY_CTA}
           </button>
           <a
+            href={WHATSAPP_URL}
+            onClick={trackWhatsApp}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center justify-center gap-2.5 rounded-full bg-[#25d366] px-7 py-4 text-base font-semibold text-[#0b2816] transition duration-300 hover:-translate-y-1 hover:bg-[#35e074] focus:outline-none focus:ring-2 focus:ring-white/70"
+          >
+            <WhatsAppIcon className="h-5 w-5" />
+            {WHATSAPP_CTA}
+          </a>
+          <a
             href={PHONE_TEL}
+            onClick={trackCall}
             className="inline-flex items-center justify-center gap-2.5 rounded-full border border-white/25 px-7 py-4 text-base font-semibold text-white transition duration-300 hover:-translate-y-1 hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/70"
           >
             <PhoneIcon />
@@ -1378,19 +1584,46 @@ function FinalCTA({ onOpenConsultation }: { onOpenConsultation: () => void }) {
 
 /* -------------------------------------- Floating Consultation ---------------------------------- */
 
+function MobileActionBar() {
+  return (
+    <div className="fixed inset-x-0 bottom-0 z-[65] grid grid-cols-2 gap-2 border-t border-white/60 bg-white/92 px-3 py-2 shadow-[0_-12px_40px_rgba(21,35,27,0.14)] backdrop-blur-xl [padding-bottom:calc(0.5rem+env(safe-area-inset-bottom))] sm:hidden">
+      <a
+        href={PHONE_TEL}
+        onClick={trackCall}
+        className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-[#1a3023] px-4 py-2 text-sm font-semibold text-white"
+      >
+        <PhoneIcon className="h-5 w-5" />
+        Call
+      </a>
+      <a
+        href={WHATSAPP_URL}
+        onClick={trackWhatsApp}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-[#25d366] px-4 py-2 text-sm font-semibold text-[#0b2816]"
+      >
+        <WhatsAppIcon className="h-5 w-5" />
+        WhatsApp
+      </a>
+    </div>
+  );
+}
+
 function FloatingConsultation({ open, setOpen }: { open: boolean; setOpen: (value: boolean) => void }) {
   const [form, setForm] = useState({
     full_name: "",
     email: "",
     phone: "",
-    city: "",
+    city: "Delhi",
     concern: "",
     appointment_date: "",
     appointment_time: "",
     message: "",
+    website: "",
   });
   const [status, setStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
   const [statusMessage, setStatusMessage] = useState<string>("");
+  const [startedAt] = useState(() => Date.now());
 
   const updateField = (field: keyof typeof form, value: string) => {
     setForm((current) => ({ ...current, [field]: value }));
@@ -1398,9 +1631,15 @@ function FloatingConsultation({ open, setOpen }: { open: boolean; setOpen: (valu
 
   const submitConsultation = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    if (form.website || Date.now() - startedAt < 3000) {
+      setStatus("error");
+      setStatusMessage("Please wait a moment and try again, or call us directly.");
+      return;
+    }
+
     if (!EMAILJS_AVAILABLE) {
       setStatus("error");
-      setStatusMessage("Email service is not configured. Please check your environment variables.");
+      setStatusMessage(`Online booking is temporarily unavailable. Please call ${PHONE_DISPLAY} or use WhatsApp.`);
       return;
     }
 
@@ -1440,23 +1679,29 @@ function FloatingConsultation({ open, setOpen }: { open: boolean; setOpen: (valu
         EMAILJS_PUBLIC_KEY,
       );
 
+      pushEvent("generate_lead", {
+        concern: form.concern || "Not specified",
+        city: form.city || "Not specified",
+      });
+      pushEvent("virtual_pageview", { page_path: "/thank-you", page_title: "Lead submitted" });
       setStatus("success");
-      setStatusMessage("Thanks! Your enquiry has been sent and we will reply shortly.");
+      setStatusMessage("Thanks! Your request has been sent. Our team will call or WhatsApp you within 24 hours.");
       setForm({
         full_name: "",
         email: "",
         phone: "",
-        city: "",
+        city: "Delhi",
         concern: "",
         appointment_date: "",
         appointment_time: "",
         message: "",
+        website: "",
       });
       window.setTimeout(() => setOpen(false), 2200);
     } catch (error) {
       console.error(error);
       setStatus("error");
-      setStatusMessage("Something went wrong while sending your request. Please try again later.");
+      setStatusMessage(`Something went wrong. Please call ${PHONE_DISPLAY} or send your photos on WhatsApp.`);
     }
   };
 
@@ -1465,7 +1710,7 @@ function FloatingConsultation({ open, setOpen }: { open: boolean; setOpen: (valu
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="fixed bottom-5 right-4 z-[70] inline-flex items-center gap-2 rounded-full bg-[#1a3023] px-4 py-3 text-sm font-semibold text-white shadow-[0_18px_48px_rgba(26,48,35,0.32)] transition duration-300 hover:-translate-y-1 hover:bg-[#2a4634] focus:outline-none focus:ring-2 focus:ring-[#c9d8bf] sm:bottom-6 sm:right-6 sm:px-5"
+        className="fixed bottom-24 right-4 z-[70] inline-flex items-center gap-2 rounded-full bg-[#1a3023] px-4 py-3 text-sm font-semibold text-white shadow-[0_18px_48px_rgba(26,48,35,0.32)] transition duration-300 hover:-translate-y-1 hover:bg-[#2a4634] focus:outline-none focus:ring-2 focus:ring-[#c9d8bf] sm:bottom-6 sm:right-6 sm:px-5"
         aria-label="Open consultation form"
       >
         <MessageCircleIcon className="h-5 w-5" />
@@ -1489,11 +1734,11 @@ function FloatingConsultation({ open, setOpen }: { open: boolean; setOpen: (valu
         id="consultation-title"
         className="mt-2 text-3xl font-semibold text-[#15231b]"
       >
-        Book Consultation
+        {PRIMARY_CTA}
       </h2>
 
       <p className="mt-2 text-sm text-[#5d6b62]">
-        Fill in your details and our hair transplant specialist will contact you shortly.
+        Share three quick details. Our team will call or WhatsApp you within 24 hours.
       </p>
     </div>
 
@@ -1511,6 +1756,16 @@ function FloatingConsultation({ open, setOpen }: { open: boolean; setOpen: (valu
     className="space-y-5"
   >
 
+    <input
+      tabIndex={-1}
+      autoComplete="off"
+      name="website"
+      value={form.website}
+      onChange={(e)=>updateField("website",e.target.value)}
+      className="hidden"
+      aria-hidden="true"
+    />
+
     <div className="grid gap-4 md:grid-cols-2">
 
       {/* Full Name */}
@@ -1523,27 +1778,10 @@ function FloatingConsultation({ open, setOpen }: { open: boolean; setOpen: (valu
         <input
           required
           name="full_name"
+          autoComplete="name"
           value={form.full_name}
           onChange={(e)=>updateField("full_name",e.target.value)}
           placeholder="John Doe"
-          className="w-full rounded-xl border border-[#d6ddd8] bg-white px-4 py-3 outline-none focus:border-[#6b8e6f]"
-        />
-      </label>
-
-      {/* Email */}
-
-      <label>
-        <span className="mb-2 block text-sm font-semibold text-[#24382d]">
-          Email
-        </span>
-
-        <input
-          type="email"
-          required
-          name="email"
-          value={form.email}
-          onChange={(e)=>updateField("email",e.target.value)}
-          placeholder="john@example.com"
           className="w-full rounded-xl border border-[#d6ddd8] bg-white px-4 py-3 outline-none focus:border-[#6b8e6f]"
         />
       </label>
@@ -1558,26 +1796,12 @@ function FloatingConsultation({ open, setOpen }: { open: boolean; setOpen: (valu
         <input
           required
           type="tel"
+          inputMode="tel"
+          autoComplete="tel"
           name="phone"
           value={form.phone}
           onChange={(e)=>updateField("phone",e.target.value)}
           placeholder="+91 9876543210"
-          className="w-full rounded-xl border border-[#d6ddd8] bg-white px-4 py-3 outline-none focus:border-[#6b8e6f]"
-        />
-      </label>
-
-      {/* City */}
-
-      <label>
-        <span className="mb-2 block text-sm font-semibold text-[#24382d]">
-          City
-        </span>
-
-        <input
-          name="city"
-          value={form.city}
-          onChange={(e)=>updateField("city",e.target.value)}
-          placeholder="Delhi / Noida"
           className="w-full rounded-xl border border-[#d6ddd8] bg-white px-4 py-3 outline-none focus:border-[#6b8e6f]"
         />
       </label>
@@ -1593,6 +1817,7 @@ function FloatingConsultation({ open, setOpen }: { open: boolean; setOpen: (valu
 
       <select
         name="concern"
+        required
         value={form.concern}
         onChange={(e)=>updateField("concern",e.target.value)}
         className="w-full rounded-xl border border-[#d6ddd8] bg-white px-4 py-3 outline-none focus:border-[#6b8e6f]"
@@ -1608,39 +1833,49 @@ function FloatingConsultation({ open, setOpen }: { open: boolean; setOpen: (valu
       </select>
     </label>
 
-    {/* Date & Time */}
+    <details className="rounded-xl border border-[#d6ddd8] bg-white/70 p-4">
+      <summary className="cursor-pointer text-sm font-semibold text-[#24382d]">Add email or city optional</summary>
+      <div className="mt-4 grid gap-4 md:grid-cols-2">
+        <label>
+          <span className="mb-2 block text-sm font-semibold text-[#24382d]">
+            Email
+          </span>
+          <input
+            type="email"
+            name="email"
+            autoComplete="email"
+            value={form.email}
+            onChange={(e)=>updateField("email",e.target.value)}
+            placeholder="john@example.com"
+            className="w-full rounded-xl border border-[#d6ddd8] bg-white px-4 py-3 outline-none focus:border-[#6b8e6f]"
+          />
+        </label>
+        <label>
+          <span className="mb-2 block text-sm font-semibold text-[#24382d]">
+            City
+          </span>
+          <input
+            name="city"
+            autoComplete="address-level2"
+            value={form.city}
+            onChange={(e)=>updateField("city",e.target.value)}
+            placeholder="Delhi / Noida"
+            className="w-full rounded-xl border border-[#d6ddd8] bg-white px-4 py-3 outline-none focus:border-[#6b8e6f]"
+          />
+        </label>
+      </div>
+    </details>
 
-    <div className="grid gap-4 md:grid-cols-2">
-
-      <label>
-        <span className="mb-2 block text-sm font-semibold text-[#24382d]">
-          Appointment Date
-        </span>
-
-        <input
-          type="date"
-          name="appointment_date"
-          value={form.appointment_date}
-          onChange={(e)=>updateField("appointment_date",e.target.value)}
-          className="w-full rounded-xl border border-[#d6ddd8] bg-white px-4 py-3 outline-none focus:border-[#6b8e6f]"
-        />
-      </label>
-
-      <label>
-        <span className="mb-2 block text-sm font-semibold text-[#24382d]">
-          Appointment Time
-        </span>
-
-        <input
-          type="time"
-          name="appointment_time"
-          value={form.appointment_time}
-          onChange={(e)=>updateField("appointment_time",e.target.value)}
-          className="w-full rounded-xl border border-[#d6ddd8] bg-white px-4 py-3 outline-none focus:border-[#6b8e6f]"
-        />
-      </label>
-
-    </div>
+    <a
+      href={WHATSAPP_URL}
+      onClick={trackWhatsApp}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="flex items-center justify-center gap-2 rounded-xl border border-[#25d366]/30 bg-[#25d366]/10 px-4 py-3 text-sm font-semibold text-[#0b2816] transition hover:bg-[#25d366]/20"
+    >
+      <WhatsAppIcon className="h-5 w-5" />
+      Send scalp photos on WhatsApp
+    </a>
 
     {/* Message */}
 
@@ -1678,7 +1913,7 @@ function FloatingConsultation({ open, setOpen }: { open: boolean; setOpen: (valu
     >
       {status==="sending"
         ? "Sending..."
-        : "Book Consultation"}
+        : PRIMARY_CTA}
     </button>
 
   </form>
@@ -1702,6 +1937,8 @@ function Footer({ onOpenConsultation }: { onOpenConsultation: () => void }) {
               <img
                 src={brandLogo}
                 alt="Renova Aura logo"
+                width="600"
+                height="180"
                 className="block h-auto w-[190px]"
               />
             </a>
@@ -1763,7 +2000,7 @@ function Footer({ onOpenConsultation }: { onOpenConsultation: () => void }) {
                 <span className="mt-1 grid h-8 w-8 shrink-0 place-items-center rounded-full bg-[#1a3023]/7 text-[#2f5239]">
                   <PhoneIcon />
                 </span>
-                <a href={PHONE_TEL} className="font-semibold text-[#24382d] hover:text-[#2f5239]">
+                <a href={PHONE_TEL} onClick={trackCall} className="font-semibold text-[#24382d] hover:text-[#2f5239]">
                   {PHONE_DISPLAY}
                 </a>
               </li>
@@ -1789,6 +2026,7 @@ function Footer({ onOpenConsultation }: { onOpenConsultation: () => void }) {
             <ul className="mt-5 space-y-3 text-sm font-medium text-[#52615a]">
               <li><a href="#results" className="hover:text-[#15231b]">Patient results</a></li>
               <li><a href="#method" className="hover:text-[#15231b]">Our method</a></li>
+              <li><a href="#pricing" className="hover:text-[#15231b]">Hair transplant cost</a></li>
               <li><a href="#doctor" className="hover:text-[#15231b]">Doctor profile</a></li>
               <li><a href="#faq" className="hover:text-[#15231b]">FAQ</a></li>
               <li><a href="#visit" className="hover:text-[#15231b]">Visit us</a></li>
