@@ -59,7 +59,7 @@ function trackWhatsApp() {
 
 const heroImage = "/images/optimized/hero-1280.webp";
 const heroImageMobile = "/images/optimized/hero-640.webp";
-const brandLogo = "/images/renova-aura-logo.svg";
+const brandLogo = "/logo.png";
 
 const navItems = [
   { label: "Results", href: "#results" },
